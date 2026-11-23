@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ETF 投資入門：給新手的指數化投資指南｜LLM Wiki 教學簡報</title>
+  <style>
+    :root {
+      --bg: #0b132b;
+      --card: #1c2541;
+      --panel: #111b36;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.14);
+      --warn-bg: rgba(251, 191, 36, 0.12);
+      --warn-border: #fbbf24;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --success: #4ade80;
+      --danger: #f87171;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #2b3a5e;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .progress-bar {
+      height: 4px;
+      background: #2b3a5e;
+      width: 100%;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 14.28%;
+      transition: width 0.3s ease;
+    }
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .slide {
+      display: none;
+      background: var(--card);
+      border: 1px solid #2b3a5e;
+      border-radius: 16px;
+      padding: 34px 42px;
+      max-width: 960px;
+      width: 100%;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+      animation: fadeIn 0.25s ease;
+    }
+    .slide.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .wiki-badge {
+      display: inline-block;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-family: monospace;
+      margin-bottom: 14px;
+    }
+    h1 { font-size: 2.1rem; line-height: 1.3; margin-bottom: 14px; }
+    h2 { font-size: 1.65rem; color: var(--accent); margin-bottom: 12px; }
+    p.lead { font-size: 1.06rem; line-height: 1.72; color: #e2e8f0; margin-bottom: 16px; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .slide { padding: 24px 20px; }
+    }
+    .box {
+      background: var(--panel);
+      border: 1px solid #2b3a5e;
+      border-radius: 12px;
+      padding: 16px 18px;
+    }
+    .box h3 { font-size: 1.04rem; color: var(--accent); margin-bottom: 8px; }
+    .myth-box {
+      background: var(--warn-bg);
+      border: 1px solid var(--warn-border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.96rem;
+      line-height: 1.6;
+      color: #fef3c7;
+      margin-top: 12px;
+    }
+    ul { padding-left: 20px; line-height: 1.72; font-size: 0.98rem; }
+    li { margin-bottom: 6px; }
+    code {
+      background: rgba(15, 23, 42, 0.85);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--accent);
+      font-size: 0.88rem;
+    }
+    .quiz-card {
+      background: var(--panel);
+      border: 1px solid #2b3a5e;
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+    }
+    .quiz-card p { font-weight: 600; margin-bottom: 10px; font-size: 1rem; }
+    .quiz-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .quiz-btn {
+      background: #1c2541;
+      color: var(--text);
+      border: 1px solid #475569;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.92rem;
+      transition: 0.2s;
+    }
+    .quiz-btn:hover { border-color: var(--accent); }
+    .feedback { margin-top: 8px; font-size: 0.92rem; font-weight: 600; }
+    footer {
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #2b3a5e;
+      gap: 12px;
+    }
+    .dots { display: flex; gap: 8px; }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #334155;
+      cursor: pointer;
+      border: none;
+    }
+    .dot.active { background: var(--accent); transform: scale(1.2); }
+    button.nav-btn {
+      background: var(--accent);
+      color: #0b132b;
+      border: none;
+      padding: 9px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.92rem;
+    }
+    button.nav-btn:disabled {
+      background: #2b3a5e;
+      color: #64748b;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <span>LLM Wiki 知識庫驅動教學簡報｜ETF 投資入門</span>
+    <span id="slide-counter">1 / 7</span>
+  </header>
+  <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+  <main>
+    <!-- Slide 1: Cover & Learning Map -->
+    <section class="slide active">
+      <div class="wiki-badge">📚 Wiki 來源：wiki/index.md（整合 source-01 ~ source-05）</div>
+      <h1>ETF 投資入門：<br>給新手的指數化投資指南</h1>
+      <p class="lead">本簡報內容完全取材自個人建立的 <strong>ETF 投資 LLM Wiki</strong>，用生活化比喻帶零基礎初學者一次搞懂 ETF 核心概念、挑選指標與常見誤區。</p>
+      <div class="box">
+        <h3>🗺️ 新手學習地圖（每頁皆對應專屬 Wiki 知識條目）</h3>
+        <ul>
+          <li><strong>01｜什麼是 ETF？</strong> → <code>wiki/01-what-is-etf.md</code>（來源：source-01）</li>
+          <li><strong>02｜市值型 vs. 高股息型比較</strong> → <code>wiki/02-etf-types.md</code>（來源：source-02）</li>
+          <li><strong>03｜挑選 ETF 的四大指標</strong> → <code>wiki/03-selection-metrics.md</code>（來源：source-03）</li>
+          <li><strong>04｜新手實戰：定期定額策略</strong> → <code>wiki/04-dca-strategy.md</code>（來源：source-04）</li>
+          <li><strong>05｜破除 ETF 三大常見迷思</strong> → <code>wiki/05-etf-myths.md</code>（來源：source-05）</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Slide 2: wiki/01-what-is-etf.md -->
+    <section class="slide">
+      <div class="wiki-badge">📚 Wiki 來源：wiki/01-what-is-etf.md｜[來源: source-01]</div>
+      <h2>01｜什麼是 ETF？（指數股票型基金）</h2>
+      <p class="lead"><strong>ETF（Exchange Traded Fund）</strong>是把許多家公司的股票打包在一起、追蹤特定指數表現，並且像一般股票一樣在證券交易所買賣的投資工具。</p>
+      <div class="grid-2">
+        <div class="box">
+          <h3>🍱 生活化比喻：單點 vs. 綜合便當</h3>
+          <ul>
+            <li><strong>買單一股票 ＝ 單點一道菜</strong>：若廚師當天失常（公司營運出狀況），整頓飯就毀了。</li>
+            <li><strong>買 ETF ＝ 點一份綜合便當</strong>：依公開食譜（指數規則）自動配好主菜與配菜，單一配菜失常時整體依然能吃飽，大幅分散風險。</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>⚙️ 三大核心運作特色</h3>
+          <ul>
+            <li><strong>雙重交易特性</strong>：兼具「共同基金（持有一籃子股票）」與「股票（盤中隨時在交易所買賣）」優點。</li>
+            <li><strong>被動追蹤指數為主</strong>：依指數規則自動納入或汰換成分股（市場上亦有經理人主動選股的主動式 ETF）。</li>
+            <li><strong>低門檻分散持股</strong>：買進一張或零股，就能同時成為數十至數百家企業股東。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="myth-box">
+        ⚠️ <strong>新手常見誤區</strong>：誤以為買 ETF 像銀行定存一樣「保本不會跌」— ETF 只是分散單一企業風險，價格仍會隨股市大盤漲跌（<code>source-01</code>, <code>source-05</code>）。
+      </div>
+    </section>
+
+    <!-- Slide 3: wiki/02-etf-types.md -->
+    <section class="slide">
+      <div class="wiki-badge">📚 Wiki 來源：wiki/02-etf-types.md｜[來源: source-02]</div>
+      <h2>02｜ETF 常見類型：市值型 vs. 高股息型</h2>
+      <p class="lead">依據指數選股邏輯不同，新手最常接觸的股票型 ETF 分為追求整體市場成長的「市值型」，與追求穩定現金股利發放的「高股息型」。</p>
+      <div class="grid-2">
+        <div class="box">
+          <h3>🌱 市值型 ETF ＝ 栽培一棵果樹苗</h3>
+          <ul>
+            <li><strong>選股邏輯</strong>：依公司市值大小挑選龍頭企業，走勢緊貼大盤。</li>
+            <li><strong>核心目標</strong>：讓整棵樹越長越高大，賺取長期資本利得。</li>
+            <li><strong>適合對象</strong>：投資時間長、希望資產隨整體經濟成長累積的族群。</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>🐔 高股息型 ETF ＝ 飼養下蛋的母雞</h3>
+          <ul>
+            <li><strong>選股邏輯</strong>：挑選股利率較高的成分股。</li>
+            <li><strong>核心目標</strong>：定期收成雞蛋（現金股利），提供穩定的現金流。</li>
+            <li><strong>評估關鍵</strong>：不能只看配息率，除息後股價必須漲回原價（<strong>填息</strong>），總報酬才算真正入袋。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="myth-box">
+        ⚠️ <strong>新手常見誤區</strong>：誤以為「高股息 ETF 一定比市值型賺更多」— 配息率不等於總報酬率，若只領股息卻長期未填息，只是把本金換成現金（<code>source-02</code>, <code>source-05</code>）。
+      </div>
+    </section>
+
+    <!-- Slide 4: wiki/03-selection-metrics.md -->
+    <section class="slide">
+      <div class="wiki-badge">📚 Wiki 來源：wiki/03-selection-metrics.md｜[來源: source-03]</div>
+      <h2>03｜挑選 ETF 的四大客觀指標</h2>
+      <p class="lead">買進前先看懂這四個體檢項目，確認 ETF 運作是否有效率且價格合理（比喻：<strong>淨值＝工廠出廠價</strong>，<strong>市價＝拍賣會現場成交價</strong>）：</p>
+      <div class="grid-2">
+        <div class="box">
+          <h3>🎯 1. 追蹤誤差（Tracking Error）</h3>
+          <p style="font-size:0.95rem;">衡量 ETF 實際「淨值」報酬與「目標指數」表現的偏離程度，誤差越小代表複製大盤越精準。</p>
+        </div>
+        <div class="box">
+          <h3>💸 2. 內扣費用（管理費＋保管費）</h3>
+          <p style="font-size:0.95rem;">投信與保管銀行的運作成本，直接從基金淨值中扣除，也是追蹤誤差主因之一，費用越低越有利長期持有。</p>
+        </div>
+        <div class="box">
+          <h3>⚖️ 3. 折溢價（市價 vs. 淨值）</h3>
+          <p style="font-size:0.95rem;">集中市場「盤中市價」與成分股真實「淨值」的落差。若出現<strong>大幅溢價</strong>（成交價遠高於出廠價），應先觀望避免追高買貴。</p>
+        </div>
+        <div class="box">
+          <h3>💧 4. 基金規模與流動性</h3>
+          <p style="font-size:0.95rem;">規模較大、成交活絡的 ETF 買賣價差較小，也較不會因規模過小而面臨清算下市風險。</p>
+        </div>
+      </div>
+      <div class="myth-box">
+        ⚠️ <strong>新手常見誤區</strong>：把「追蹤誤差」與「折溢價」混為一談 — 追蹤誤差比的是「淨值 vs. 指數」，折溢價比的是「市價 vs. 淨值」（<code>source-03</code>）。
+      </div>
+    </section>
+
+    <!-- Slide 5: wiki/04-dca-strategy.md -->
+    <section class="slide">
+      <div class="wiki-badge">📚 Wiki 來源：wiki/04-dca-strategy.md｜[來源: source-04]</div>
+      <h2>04｜新手實戰：定期定額與微笑曲線</h2>
+      <p class="lead"><strong>定期定額（Dollar-Cost Averaging）</strong>是在固定時間間隔（如每月發薪日）投入固定金額買進 ETF，用紀律取代主觀猜測市場高低點。</p>
+      <div class="grid-2">
+        <div class="box">
+          <h3>🍎 生活化比喻：每月 3,000 元買蘋果</h3>
+          <ul>
+            <li><strong>蘋果漲價時</strong>：3,000 元自動少買幾顆（避免高點重押）。</li>
+            <li><strong>蘋果大特價時（市場下跌）</strong>：同樣 3,000 元可以買到更多顆，長期下來自然拉低平均每顆蘋果的持有成本。</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>📈 微笑曲線與時間複利</h3>
+          <ul>
+            <li><strong>克服人性弱點</strong>：避免低點恐懼不敢買、高點貪婪追買。</li>
+            <li><strong>微笑曲線效應</strong>：市場先跌後漲時，低檔累積的較多股數會在反彈時加速帶動報酬轉正。</li>
+            <li><strong>時間複利滾雪球</strong>：前期本金小感覺不明顯，時間拉長後複利斜率會越來越顯著。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="myth-box">
+        ⚠️ <strong>新手常見誤區</strong>：看到帳面虧損就立刻停止扣款 — 市場下跌反而是累積「便宜股數」的關鍵時期，中途停扣會錯失微笑曲線回升紅利（<code>source-04</code>）。
+      </div>
+    </section>
+
+    <!-- Slide 6: wiki/05-etf-myths.md -->
+    <section class="slide">
+      <div class="wiki-badge">📚 Wiki 來源：wiki/05-etf-myths.md｜[來源: source-05]</div>
+      <h2>05｜破除新手最常踩的三大迷思</h2>
+      <div class="box" style="margin-bottom: 14px;">
+        <h3>🍕 生活化比喻：1,000 元大披薩切幾片？</h3>
+        <p style="font-size:0.96rem;">一張 1,000 元的大披薩切成 10 片（每片 100 元），或切成 100 小塊（每塊 10 元），<strong>披薩的總份量與價值完全一樣</strong>，不會因為每小塊只要 10 元就比較划算！</p>
+      </div>
+      <div class="box">
+        <ul>
+          <li><strong>迷思一：發行價 10 元的新 ETF 比老牌高價 ETF 便宜？</strong><br>❌ 正解：單張價格只取決於淨值切分方式，未來報酬取決於「成分股漲幅百分比」，與股價高低無關（<code>source-05</code>）。</li>
+          <li><strong>迷思二：配息率越高、越頻繁就代表賺越多？</strong><br>❌ 正解：配息是從淨值中扣除發放（左手換右手），若未「填息」總資產並未增加（<code>source-02</code>, <code>source-05</code>）。</li>
+          <li><strong>迷思三：買一籃子股票的 ETF 絕對不會賠錢？</strong><br>❌ 正解：ETF 分散了單一公司倒閉的「非系統性風險」，但遇到經濟衰退時仍會隨大盤下跌（<strong>系統性風險</strong>）（<code>source-05</code>）。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Slide 7: Interactive Quiz -->
+    <section class="slide">
+      <div class="wiki-badge">📚 Wiki 來源：wiki/01 ~ wiki/05 綜合觀念檢核</div>
+      <h2>06｜初學者隨堂檢核（點擊選項測試理解度）</h2>
+
+      <div class="quiz-card">
+        <p>Q1. 新手看到某檔新成立 ETF 發行價只要 10 元，覺得比 100 元的老牌 ETF 便宜很多，這個想法正確嗎？</p>
+        <div class="quiz-options">
+          <button class="quiz-btn" onclick="ans(1, false)">A. 正確，10 元漲到 20 元比較容易</button>
+          <button class="quiz-btn" onclick="ans(1, true)">B. 錯誤，就像同一張大披薩切幾片，漲跌看的是成分股百分比</button>
+        </div>
+        <div class="feedback" id="fb-1"></div>
+      </div>
+
+      <div class="quiz-card">
+        <p>Q2. 當一檔 ETF 在拍賣市場的「盤中市價」遠高於工廠出廠價「真實淨值」（大幅溢價）時，應該怎麼做？</p>
+        <div class="quiz-options">
+          <button class="quiz-btn" onclick="ans(2, true)">A. 先暫緩觀望，避免用高於實際價值的冤枉價格買貴</button>
+          <button class="quiz-btn" onclick="ans(2, false)">B. 趕快追買，代表這檔 ETF 的追蹤誤差非常小</button>
+        </div>
+        <div class="feedback" id="fb-2"></div>
+      </div>
+
+      <div class="quiz-card" style="margin-bottom: 0;">
+        <p>Q3. 執行定期定額期間遇到股市下跌、帳面出現虧損，依據「微笑曲線」原理應該怎麼做？</p>
+        <div class="quiz-options">
+          <button class="quiz-btn" onclick="ans(3, false)">A. 立刻停止扣款，等大漲回來再重新開始</button>
+          <button class="quiz-btn" onclick="ans(3, true)">B. 維持紀律繼續扣款，趁低檔累積更多便宜股數以攤平成本</button>
+        </div>
+        <div class="feedback" id="fb-3"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)" disabled>← 上一頁</button>
+    <div class="dots" id="dots"></div>
+    <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁 →</button>
+  </footer>
+
+  <script>
+    const slides = document.querySelectorAll(".slide");
+    const counter = document.getElementById("slide-counter");
+    const progress = document.getElementById("progress");
+    const prevBtn = document.getElementById("prev-btn");
+    const nextBtn = document.getElementById("next-btn");
+    const dotsContainer = document.getElementById("dots");
+    let current = 0;
+
+    slides.forEach((_, idx) => {
+      const dot = document.createElement("button");
+      dot.className = "dot" + (idx === 0 ? " active" : "");
+      dot.setAttribute("aria-label", `跳至第 ${idx + 1} 頁`);
+      dot.onclick = () => { current = idx; updateSlide(); };
+      dotsContainer.appendChild(dot);
+    });
+
+    function updateSlide() {
+      slides.forEach((s, i) => s.classList.toggle("active", i === current));
+      document.querySelectorAll(".dot").forEach((d, i) => d.classList.toggle("active", i === current));
+      counter.textContent = `${current + 1} / ${slides.length}`;
+      progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === slides.length - 1;
+    }
+
+    function changeSlide(step) {
+      const next = current + step;
+      if (next >= 0 && next < slides.length) {
+        current = next;
+        updateSlide();
+      }
+    }
+
+    function ans(qNum, isCorrect) {
+      const fb = document.getElementById(`fb-${qNum}`);
+      const refs = {
+        1: "依據 wiki/05-etf-myths.md（source-05）：股價高低只取決於淨值切分方式，與便宜與否無關。",
+        2: "依據 wiki/03-selection-metrics.md（source-03）：大幅溢價代表市價遠高於淨值，追高容易買貴。",
+        3: "依據 wiki/04-dca-strategy.md（source-04）：跌買多、漲買少才能在市場回升時發揮微笑曲線效果。"
+      };
+      if (isCorrect) {
+        fb.style.color = "var(--success)";
+        fb.textContent = `✅ 答對了！${refs[qNum]}`;
+      } else {
+        fb.style.color = "var(--danger)";
+        fb.textContent = `❌ 再想一想喔！${refs[qNum]}`;
+      }
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === " ") changeSlide(1);
+      if (e.key === "ArrowLeft") changeSlide(-1);
+    });
+  </script>
+</body>
+</html>
